@@ -1,8 +1,13 @@
 package com.erdal.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,32 +21,36 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	
+	
+	
+	
+	
+//----------get all users-------------
+	@GetMapping("/getAll")
+	public List<User> getUsers() {
 
-//	@GetMapping("/get")
-//	public User getUser() {
-//
-//		User user = new User();
-//
-//		user.setFullName("Erdal Hulagu");
-//		user.setEmail("erdalHulagu23@gmail.com");
-//		user.setPhone("+447586654863");
-//		user.setCreatAt(LocalDateTime.now());
-//		user.setRole("Costumer");
-//		return user;
-//
-//	}
+		return userRepository.findAll();
 
+	}
+
+	
+	//----------save  user------------
 	@PostMapping("/save")
 	public User createUser(@RequestBody User user) {
 		
-//		User user2=new User();
-//		
-//		user2.setFullName(user.getFullName());
-//		user2.setEmail(user.getEmail());
-//		user2.setRole(user.getRole());
-//		user2.setPhone(user.getPhone());
-		
 		return userRepository.save(user);
+	}
+	
+	
+	//----------update  user------------
+	@GetMapping("/{id}")
+	public User getUserById(@PathVariable Long id  ) throws Exception {
+		
+		 User user=	userRepository.findById(id).orElseThrow(() -> new Exception(String.format("User not Found ", "with",id)));
+	
+		return user;
 	}
 
 }
