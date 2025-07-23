@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erdal.model.User;
+import com.erdal.modelDTO.UserDTO;
 import com.erdal.repository.UserRepository;
+import com.erdal.service.UserService;
 
 @RequestMapping("/api/users")
 @RestController
@@ -21,6 +23,9 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private UserService userService;
+	
 	
 	
 	
@@ -28,28 +33,27 @@ public class UserController {
 	
 //----------get all users-------------
 	@GetMapping("/getAll")
-	public List<User> getUsers() {
+	public List<UserDTO> getUsers() {
 
-		return userRepository.findAll();
+		return userService.getAllUsers();
 
 	}
 
 	
 	//----------save  user------------
 	@PostMapping("/save")
-	public User createUser(@RequestBody User user) {
+	public UserDTO createUser(@RequestBody User user) {
 		
-		return userRepository.save(user);
+		return userService.saveUser(user);
 	}
 	
 	
 	//----------update  user------------
 	@GetMapping("/{id}")
-	public User getUserById(@PathVariable Long id  ) throws Exception {
+	public UserDTO getUserById(@PathVariable Long id  ) throws Exception  {
 		
-		 User user=	userRepository.findById(id).orElseThrow(() -> new Exception(String.format("User not Found ", "with",id)));
-	
-		return user;
+		UserDTO userDTO= userService.getUserById(id);
+		return userDTO;
 	}
 //	@PutMapping("/{id}")
 //	public User updateUser(@PathVariable Long id  ) 
