@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.erdal.exeptions.ConfirmMessage;
 import com.erdal.model.User;
 import com.erdal.modelDTO.UserDTO;
 import com.erdal.repository.UserRepository;
 import com.erdal.requests.UserUpdateRequest;
 import com.erdal.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RequestMapping("/api/users")
 @RestController
@@ -46,7 +46,7 @@ public class UserController {
 	
 	//----------save  user------------
 	@PostMapping("/save")
-	public UserDTO createUser(@RequestBody User user) {
+	public UserDTO createUser(@RequestBody @Valid User user) {
 		
 		return userService.saveUser(user);
 	}

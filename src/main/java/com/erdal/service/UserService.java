@@ -51,6 +51,7 @@ public class UserService {
 
 		user.setFullName(userUpdateRequest.getFullName());
 		user.setEmail(userUpdateRequest.getEmail());
+		user.setPassword(userUpdateRequest.getPassword());
 		user.setPhone(userUpdateRequest.getPhone());
 		user.setUpdateAt(LocalDateTime.now());
 
