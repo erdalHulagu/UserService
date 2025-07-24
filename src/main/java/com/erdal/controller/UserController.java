@@ -4,6 +4,9 @@ package com.erdal.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,19 +19,23 @@ import com.erdal.model.User;
 import com.erdal.modelDTO.UserDTO;
 import com.erdal.repository.UserRepository;
 import com.erdal.requests.UserUpdateRequest;
+import com.erdal.responseMessages.Response;
+import com.erdal.responseMessages.ResponseMessage;
 import com.erdal.service.UserService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/api/users")
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-	@Autowired
-	private UserRepository userRepository;
 	
-	@Autowired
-	private UserService userService;
+	private final UserRepository userRepository;
+	
+	
+	private final UserService userService;
 	
 	
 	
@@ -37,42 +44,48 @@ public class UserController {
 	
 //----------get all users-------------
 	@GetMapping("/getAll")
-	public List<UserDTO> getUsers() {
+	public ResponseEntity< List<UserDTO> >getUsers() {
 
-		return userService.getAllUsers();
+		List<UserDTO> users= userService.getAllUsers();
+		
+		return ResponseEntity.ok(users);
 
 	}
 
 	
 	//----------save  user------------
 	@PostMapping("/save")
-	public UserDTO createUser(@RequestBody @Valid User user) {
+	public ResponseEntity<UserDTO>  createUser(@RequestBody @Valid User user) {
 		
-		return userService.saveUser(user);
+		 UserDTO usr =userService.createUser(user);
+		 return new ResponseEntity<>(usr,HttpStatus.CREATED);
+		 
 	}
 	
 	
 	//----------update  user------------
 	@GetMapping("/{id}")
-	public UserDTO getUserById(@PathVariable Long id  )  {
+	public ResponseEntity<UserDTO> getUserById(@PathVariable Long id  )  {
 		
 		UserDTO userDTO= userService.getUserById(id);
-		return userDTO;
+		return new ResponseEntity<>(userDTO,HttpStatus.OK);
 	}
 	@PutMapping("/update/{id}")
-	public UserDTO updateUser(@PathVariable Long id ,@RequestBody UserUpdateRequest userUpdateRequest ) {
+	public ResponseEntity<UserDTO > updateUser(@PathVariable Long id ,@RequestBody UserUpdateRequest userUpdateRequest ) {
 		
-	UserDTO userDto=userService.upDateUser(id,userUpdateRequest);
-	return userDto;
+	UserDTO userDto=userService.updateUser(id,userUpdateRequest);
+	return ResponseEntity.ok(userDto);
 	}
 	
 	
 	@DeleteMapping("delete/{id}")
-	public String deleteUser(@PathVariable Long id) {
+	public ResponseEntity<Response> deleteUser(@PathVariable Long id) {
 		
-	String msg=	userService.deleteUserById(id);
+	String msg=	userService.deleteUser(id);
+		Response response=new Response();
+		response.setMessage(msg);
 		
-		return msg;
+		return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
 		
 		
 		

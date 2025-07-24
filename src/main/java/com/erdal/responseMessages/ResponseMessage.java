@@ -1,6 +1,6 @@
-package com.erdal.exeptions;
+package com.erdal.responseMessages;
 
-public class ConfirmMessage {
+public class ResponseMessage {
 
 	public static final String USER_DELETED_MESSAGE = "User deleted succesfully with id %d";
 
