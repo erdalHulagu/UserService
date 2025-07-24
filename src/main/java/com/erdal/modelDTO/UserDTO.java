@@ -22,6 +22,8 @@ import lombok.Setter;
 		
 		private String password;
 		
+		private String userName;
+		
 		private String phone;
 		
 		private String role;

@@ -43,6 +43,10 @@ public class User {
 	@NotBlank(message = "password is mandatory")
 	private String password;
 	
+	@NonNull
+	@NotBlank(message = "password is mandatory")
+	private String userName;
+	
 	private String phone;
 	
 	@NotBlank(message = "Role is mandatory")

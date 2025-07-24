@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userUpdateRequest.getEmail());
 		user.setPassword(userUpdateRequest.getPassword());
 		user.setPhone(userUpdateRequest.getPhone());
+		user.setUserName(userUpdateRequest.getUserName());
 		user.setUpdateAt(LocalDateTime.now());
 
 		return userToUserDto(user);
@@ -97,6 +98,7 @@ public class UserServiceImpl implements UserService {
 		dto.setPhone(user.getPhone());
 		dto.setRole(user.getRole());
 		dto.setPassword(user.getPassword());
+		dto.setUserName(user.getUserName());
 		dto.setCreatAt(user.getCreatAt());
 		dto.setUpdateAt(user.getUpdateAt());
 
@@ -114,6 +116,7 @@ public class UserServiceImpl implements UserService {
 		user.setPhone(userDTO.getRole());
 		user.setRole(userDTO.getRole());
 		user.setPassword(userDTO.getPassword());
+		user.setUserName(userDTO.getUserName());
 		user.setCreatAt(userDTO.getCreatAt());
 		user.setUpdateAt(userDTO.getUpdateAt());
 		return user;

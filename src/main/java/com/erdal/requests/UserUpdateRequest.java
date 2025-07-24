@@ -16,12 +16,14 @@ public class UserUpdateRequest {
 	private String fullName;
 
 	private String email;
+	
+	public String password;
 
+	private String userName;
+	
 	private String phone;
 
 	private String role;
-
-	public String password;
 
 	
 
