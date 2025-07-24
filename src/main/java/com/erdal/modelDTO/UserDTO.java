@@ -9,6 +9,8 @@ package com.erdal.modelDTO;
 		
 		private String email;
 		
+		private String password;
+		
 		private String phone;
 		
 		private String role;
@@ -20,10 +22,11 @@ package com.erdal.modelDTO;
 		
 		
 
-		public UserDTO(String fullName, String email, String phone, String role, LocalDateTime creatAt,
+		public UserDTO(String fullName, String email, String password, String phone, String role, LocalDateTime creatAt,
 				LocalDateTime updateAt) {
 			this.fullName = fullName;
 			this.email = email;
+			this.password=password;
 			this.phone = phone;
 			this.role = role;
 			this.creatAt = creatAt;
@@ -50,6 +53,14 @@ package com.erdal.modelDTO;
 			this.email = email;
 		}
 
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
+		
 		public String getPhone() {
 			return phone;
 		}

@@ -20,6 +20,8 @@ public class User {
 	
 	private String email;
 	
+	private String password;
+	
 	private String phone;
 	
 	private String role;
@@ -31,20 +33,25 @@ public class User {
 	
 	
 
-	public User(Long id,String fullName, String email, String phone, String role, LocalDateTime creatAt,
+	public User(Long id,String fullName, String email,String password, String phone, String role, LocalDateTime creatAt,
 			LocalDateTime updateAt) {
+		
+		this.id=id;
 		this.fullName = fullName;
 		this.email = email;
+		this.password=password;
 		this.phone = phone;
 		this.role = role;
 		this.creatAt = creatAt;
 		this.updateAt = updateAt;
-		this.id=id;
+		
 	}
+
+	
 
 	public User () {}
 	
-	public Long id() {
+	public Long getId() {
 		return id;
 	}
 	
@@ -69,6 +76,14 @@ public class User {
 		this.email = email;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 	public String getPhone() {
 		return phone;
 	}

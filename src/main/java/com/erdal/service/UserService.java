@@ -1,14 +1,19 @@
 package com.erdal.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erdal.exeptions.ConfirmMessage;
+import com.erdal.exeptions.ErrorMessages;
+import com.erdal.exeptions.ResourceNotFoundExeption;
 import com.erdal.model.User;
 import com.erdal.modelDTO.UserDTO;
 import com.erdal.repository.UserRepository;
+import com.erdal.requests.UserUpdateRequest;
 
 @Service
 public class UserService {
@@ -26,22 +31,55 @@ public class UserService {
 
 	// ------------ save user ---------------------
 	public UserDTO saveUser(User user) {
-
+		user.setCreatAt(LocalDateTime.now());
 		User savedUser = userRepository.save(user);
 
 		return userToUserDto(savedUser);
 	}
 
 	// ---------------- get user by id --------------------
-	public UserDTO getUserById(Long id) throws Exception {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new Exception(String.format("User not Found ", "with", id)));
-
+	public UserDTO getUserById(Long id) {
+		User user = findUserById(id);
 		return userToUserDto(user);
 
 	}
 
+	// ---------------- up date user --------------------
+	public UserDTO upDateUser(Long id, UserUpdateRequest userUpdateRequest) {
+
+		User user = findUserById(id);
+
+		user.setFullName(userUpdateRequest.getFullName());
+		user.setEmail(userUpdateRequest.getEmail());
+		user.setPhone(userUpdateRequest.getPhone());
+		user.setUpdateAt(LocalDateTime.now());
+
+		return userToUserDto(user);
+	}
+
+	
+	// ---------------- delete user --------------------
+	public String deleteUserById(Long id) {
+
+		User user = findUserById(id);
+
+		userRepository.deleteById(user.getId());
+
+		return String.format(ConfirmMessage.USER_DELETED_MESSAGE, id);
+
+	}
+
 	// ------------ METODS OF THIS CLASS --------------
+
+	// ------------ find user by id -----------------
+	public User findUserById(Long id) {
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundExeption(String.format(ErrorMessages.USER_ID_NOT_FOUND, id)));
+
+		return user;
+
+	}
+
 	// ------------ map User To User Dto ------------------
 	public UserDTO userToUserDto(User user) {
 
@@ -49,8 +87,11 @@ public class UserService {
 
 		dto.setFullName(user.getFullName());
 		dto.setEmail(user.getEmail());
-		dto.setPhone(user.getRole());
+		dto.setPhone(user.getPhone());
 		dto.setRole(user.getRole());
+		dto.setPassword(user.getPassword());
+		dto.setCreatAt(user.getCreatAt());
+		dto.setUpdateAt(user.getUpdateAt());
 
 		return dto;
 
@@ -65,7 +106,9 @@ public class UserService {
 		user.setEmail(userDTO.getEmail());
 		user.setPhone(userDTO.getRole());
 		user.setRole(userDTO.getRole());
-
+		user.setPassword(userDTO.getPassword());
+		user.setCreatAt(userDTO.getCreatAt());
+		user.setUpdateAt(userDTO.getUpdateAt());
 		return user;
 
 	}
@@ -76,24 +119,24 @@ public class UserService {
 		List<UserDTO> userDTOs = new ArrayList<>();
 
 		for (User user : users) {
-			 UserDTO dto =userToUserDto(user);
+			UserDTO dto = userToUserDto(user);
 			userDTOs.add(dto);
 		}
 
 		return userDTOs;
 	}
-	
+
 	// ------------ map userDto To User List ------------------
-		public List<User> userDtoToUserList(List<UserDTO> userDtos) {
+	public List<User> userDtoToUserList(List<UserDTO> userDtos) {
 
-			List<User> users = new ArrayList<>();
+		List<User> users = new ArrayList<>();
 
-			for (UserDTO userDTO : userDtos) {
-				User user =userDtoToUser(userDTO);
-				users.add(user);
-			}
-
-			return users;
+		for (UserDTO userDTO : userDtos) {
+			User user = userDtoToUser(userDTO);
+			users.add(user);
 		}
+
+		return users;
+	}
 
 }
