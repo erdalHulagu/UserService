@@ -1,12 +1,11 @@
 server: 
- port: 8080
+ port: 5000
  error: 
   include-binding-errors: always
   include-message: always
   include-exception: true
   
 spring:
-  
  datasource:
   hikari:
    autoCommit : false
@@ -25,7 +24,7 @@ spring:
 
 info:
  application: 
-  name: 'user booking service' 
+  name: 'user service' 
   description: 'This is a user service saloon booking system'
   version: '@project.version@' 
    
