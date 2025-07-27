@@ -25,6 +25,6 @@ spring:
 info:
  application: 
   name: 'user service' 
-  description: 'This is a user service saloon booking system'
+  description: 'This is a user microservice for saloon booking system'
   version: '@project.version@' 
    
