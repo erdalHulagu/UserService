@@ -1,6 +1,7 @@
 package com.erdal.modelDTO;
 
 	import java.time.LocalDateTime;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,7 @@ import lombok.Setter;
 		
 		private String phone;
 		
-		private String role;
+		private Set<String> roles;
 		
 		private LocalDateTime creatAt;
 		

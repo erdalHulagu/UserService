@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erdal.model.User;
 import com.erdal.modelDTO.UserDTO;
 import com.erdal.repository.UserRepository;
-import com.erdal.requests.UserUpdateRequest;
+import com.erdal.requests.UserRequest;
 import com.erdal.responseMessages.Response;
 import com.erdal.responseMessages.ResponseMessage;
 import com.erdal.service.UserService;
@@ -54,9 +54,9 @@ public class UserController {
 	
 	//----------save  user------------
 	@PostMapping("/save")
-	public ResponseEntity<UserDTO>  createUser(@RequestBody @Valid User user) {
+	public ResponseEntity<UserDTO>  createUser(@RequestBody @Valid UserRequest userRequest) {
 		
-		 UserDTO usr =userService.createUser(user);
+		 UserDTO usr =userService.createUser(userRequest);
 		 return new ResponseEntity<>(usr,HttpStatus.CREATED);
 		 
 	}
@@ -70,7 +70,7 @@ public class UserController {
 		return new ResponseEntity<>(userDTO,HttpStatus.OK);
 	}
 	@PutMapping("/update/{id}")
-	public ResponseEntity<UserDTO > updateUser(@PathVariable Long id ,@RequestBody UserUpdateRequest userUpdateRequest ) {
+	public ResponseEntity<UserDTO > updateUser(@PathVariable Long id ,@RequestBody UserRequest userUpdateRequest ) {
 		
 	UserDTO userDto=userService.updateUser(id,userUpdateRequest);
 	return ResponseEntity.ok(userDto);
