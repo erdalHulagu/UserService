@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.erdal.model.User;
 import com.erdal.modelDTO.UserDTO;
+import com.erdal.requests.UserRequest;
 import com.erdal.requests.UserUpdateRequest;
 
 public interface UserService  {
 	
-	UserDTO createUser(User user);
+	UserDTO createUser(UserRequest userRequest);
 	
 	UserDTO getUserById(Long id);
 	
@@ -16,7 +17,7 @@ public interface UserService  {
 	
 	String deleteUser(Long id);
 	
-	UserDTO updateUser(Long id,UserUpdateRequest userUpdateRequest);
+	UserDTO updateUser(Long id,UserRequest userRequest);
 
 	
 	

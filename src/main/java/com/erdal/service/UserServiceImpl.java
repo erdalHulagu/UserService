@@ -2,16 +2,23 @@ package com.erdal.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.management.relation.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.erdal.enums.UserRole;
 import com.erdal.exeptions.ErrorMessages;
 import com.erdal.exeptions.UserNotFoundExeption;
 import com.erdal.model.User;
 import com.erdal.modelDTO.UserDTO;
 import com.erdal.repository.UserRepository;
+import com.erdal.requests.UserRequest;
 import com.erdal.requests.UserUpdateRequest;
 import com.erdal.responseMessages.ResponseMessage;
 
@@ -23,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
 	
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<UserDTO> getAllUsers() {
@@ -33,13 +41,22 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// ------------ save user ---------------------
+	
 	@Override
-	public UserDTO createUser(User user) {
-		user.setCreatAt(LocalDateTime.now());
-		User savedUser = userRepository.save(user);
+	public UserDTO createUser(UserRequest userRequest) {
+	    User user = new User();
+	    user.setFullName(userRequest.getFullName());
+	    user.setPhone(userRequest.getPhone());
+	    user.setEmail(userRequest.getEmail());
+	    user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+	    user.setUserName(userRequest.getUserName());
+	    user.setRoles(Set.of(UserRole.ROLE_CUSTOMER));  // default role
+	    user.setCreatAt(LocalDateTime.now());
 
-		return userToUserDto(savedUser);
+	    User savedUser = userRepository.save(user);
+	    return userToUserDto(savedUser);
 	}
+
 
 	// ---------------- get user by id --------------------
 	@Override
@@ -51,15 +68,15 @@ public class UserServiceImpl implements UserService {
 
 	// ---------------- up date user --------------------
 	@Override
-	public UserDTO updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+	public UserDTO updateUser(Long id, UserRequest userRequest) {
 
 		User user = findUserById(id);
 
-		user.setFullName(userUpdateRequest.getFullName());
-		user.setEmail(userUpdateRequest.getEmail());
-		user.setPassword(userUpdateRequest.getPassword());
-		user.setPhone(userUpdateRequest.getPhone());
-		user.setUserName(userUpdateRequest.getUserName());
+		user.setFullName(userRequest.getFullName());
+		user.setEmail(userRequest.getEmail());
+		user.setPassword(userRequest.getPassword());
+		user.setPhone(userRequest.getPhone());
+		user.setUserName(userRequest.getUserName());
 		user.setUpdateAt(LocalDateTime.now());
 
 		return userToUserDto(user);
@@ -96,7 +113,7 @@ public class UserServiceImpl implements UserService {
 		dto.setFullName(user.getFullName());
 		dto.setEmail(user.getEmail());
 		dto.setPhone(user.getPhone());
-		dto.setRole(user.getRole());
+		dto.setRoles(Set.of(UserRole.ROLE_CUSTOMER));
 		dto.setPassword(user.getPassword());
 		dto.setUserName(user.getUserName());
 		dto.setCreatAt(user.getCreatAt());
@@ -114,7 +131,7 @@ public class UserServiceImpl implements UserService {
 		user.setFullName(userDTO.getFullName());
 		user.setEmail(userDTO.getEmail());
 		user.setPhone(userDTO.getRole());
-		user.setRole(userDTO.getRole());
+		user.setUserRole(userDTO.getRole());
 		user.setPassword(userDTO.getPassword());
 		user.setUserName(userDTO.getUserName());
 		user.setCreatAt(userDTO.getCreatAt());
