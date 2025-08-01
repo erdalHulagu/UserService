@@ -3,29 +3,30 @@ package com.erdal.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+// Method-level security açmak için
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
+@Configuration // Bu sınıf bir configuration (ayar) sınıfıdır
+@EnableMethodSecurity // @PreAuthorize, @Secured gibi method-level güvenliği aktif eder
 public class SecurityConfig {
 
-    @Bean
+    @Bean // Spring context'e SecurityFilterChain bean'i ekler
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // CSRF devre dışı (JWT veya stateless için)
+            .csrf(csrf -> csrf.disable()) // CSRF korumasını kapat (stateless API + JWT ile çalışırken genelde gerekmez)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // login/register açık
-                .requestMatchers("/api/admin/**").hasRole("ADMIN") // sadece admin
-                .requestMatchers("/api/customer/**").hasRole("CUSTOMER") // sadece customer
-                .anyRequest().authenticated()
+                .requestMatchers("/api/auth/**").permitAll() // /api/auth/** altındaki endpoint'ler herkese açık (login, register gibi)
+                .anyRequest().authenticated() // Diğer bütün istekler için kimlik doğrulaması gerekli (token vs.)
             );
-        return http.build();
+        return http.build(); // HttpSecurity yapılandırmasını tamamla ve build et
     }
 
-    @Bean
+    @Bean // Şifreleri hash'lemek için BCrypt kullanırız
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // Güçlü ve standart bir şifreleyici
     }
 }

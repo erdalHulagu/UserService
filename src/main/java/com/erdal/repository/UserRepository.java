@@ -6,4 +6,6 @@ import com.erdal.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+	boolean existsByUserName(String userName);
+
 }

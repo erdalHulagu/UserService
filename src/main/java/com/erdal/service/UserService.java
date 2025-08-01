@@ -17,6 +17,10 @@ public interface UserService  {
 	
 	UserDTO updateUser(Long id,UserRequest userRequest);
 
+	void register(UserDTO userDTO);
+
+	String login(String username, String password);
+
 	
 	
 
